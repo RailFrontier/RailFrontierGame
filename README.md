@@ -6,7 +6,7 @@ An interactive Railway system visualization and simulation project.
 
 ## ✨ Features
 
-- 🗺️ Interactive 3D map of Barcelona's metro network
+- 🗺️ Interactive 3D map of the network
 - 🚉 Detailed station information with connections
 - 🚂 Complete metro line visualization with accurate routes
 - 🔄 Real-time updates and simulations
