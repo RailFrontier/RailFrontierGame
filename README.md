@@ -4,6 +4,12 @@ An interactive Railway system visualization and simulation project.
 
 ![Metro Map Preview](public/Captura1.png)
 
+
+
+https://github.com/user-attachments/assets/8ef958c2-2929-4f1e-a172-16441599838c
+
+
+
 ## ✨ Features
 
 - 🗺️ Interactive 3D map of the network
