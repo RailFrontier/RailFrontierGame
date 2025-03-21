@@ -7,6 +7,7 @@ import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import * as turf from "@turf/turf"; // Importamos Turf.js
 import { useMapStore } from "./stores/useMapStore";
+import { useLineStore } from "../../stores/LinesStore";
 import { PARETS } from "~/Logic/Utils/test";
 import { estaciones } from "~/Logic/Data/Estaciones";
 import { addStation } from "~/Logic/Main/main";
@@ -27,6 +28,7 @@ import { showStations } from "~/Logic/Utils/utils";
 import { useDrawing } from "~/Logic/Map/useDrawing"; // Importar useDrawing
 
 const mapStore = useMapStore();
+const lineStore = useLineStore();
 const Stations = ref([]);
 
 onMounted(() => {
@@ -41,7 +43,7 @@ onMounted(() => {
     attributionControl: false, // Desactivar la marca de agua
   });
 
-  const { startDrawing } = useDrawing(map); // Extraer la función startDrawing
+  const { startDrawing, addStationPointToLine } = useDrawing(map); // Extraer la función startDrawing
 
   map.getCanvas().style.cursor = "crosshair";
 
@@ -127,7 +129,7 @@ onMounted(() => {
       type: "geojson",
       data: {
         type: "FeatureCollection",
-        features: Stations.value,
+        features: lineStore.Stations,
       },
     });
 
@@ -143,6 +145,26 @@ onMounted(() => {
       },
     });
 
+    // Capa de texto para los nombres de las estaciones
+    map.addLayer({
+      id: "stations-text",
+      type: "symbol",
+      source: "stations",
+      layout: {
+      "text-field": ["get", "nombre"], // Mostrar el nombre de la estación
+      "text-size": 12, // Tamaño del texto
+      "text-offset": [1, 0], // Desplazamiento del texto (a la derecha del punto)
+      "text-anchor": "left", // Anclaje del texto a la izquierda
+      "text-font": ["Open Sans Bold"], // Fuente en negrita
+      },
+      paint: {
+      "text-color": "#dbdcdc", // Color del texto
+      "text-halo-color": "#090909", // Color del halo (borde) del texto
+      "text-halo-width": 1.3, // Ancho del halo
+      },
+    });
+
+
     function addPoint(Feature) {
       const feature = {
         type: "Feature",
@@ -156,10 +178,11 @@ onMounted(() => {
           type: Feature.geometry.type,
           coordinates: Feature.coordinates,
         },
+        lines: [],
       };
 
-      Stations.value.push(feature);
-      console.log(Stations.value);
+      lineStore.Stations.push(feature);
+      console.log(lineStore.Stations);
       showStations();
     }
 
@@ -173,14 +196,14 @@ onMounted(() => {
       if (mapSource) {
         mapSource.setData({
           type: "FeatureCollection",
-          features: Stations.value,
+          features: lineStore.Stations,
         });
       } else {
         map.addSource("stations", {
           type: "geojson",
           data: {
             type: "FeatureCollection",
-            features: Stations.value,
+            features: lineStore.Stations,
           },
         });
 
@@ -195,32 +218,78 @@ onMounted(() => {
             "circle-stroke-color": "#FF0000",
           },
         });
+
+        // Capa de texto para los nombres de las estaciones
+        map.addLayer({
+            id: "stations-text",
+            type: "symbol",
+            source: "stations",
+            layout: {
+          "text-field": ["get", "nombre"], // Mostrar el nombre de la estación
+          "text-size": 15, // Tamaño del texto
+          "text-offset": [3, 0], // Desplazamiento del texto (más a la derecha del punto)
+          "text-anchor": "left", // Anclaje del texto a la izquierda
+            },
+            paint: {
+          "text-color": "#000000", // Color del texto
+          "text-halo-color": "#FFFFFF", // Color del halo (borde) del texto
+          "text-halo-width": 0.5, // Ancho del halo
+            },
+        });
       }
     }
 
     addPointToMap();
 
-    // Agregar evento de clic en la capa de estaciones
-    map.on("click", "stations", (e) => {
-      if (mapStore.lineCreation) {
+// Agregar evento de clic en la capa de estaciones
+map.on("click", "stations", (e) => {
+    if (mapStore.lineCreation) {
         const feature = e.features?.[0];
         if (feature) {
-          startDrawing(feature.geometry.coordinates);
+            console.log(feature.properties);
+            console.log(feature.geometry.coordinates);
+
+            const Station = {
+                id: feature.properties.id,
+                type: feature.properties.type,
+                data: feature.properties.nombre,
+                geometry: {
+                    type: feature.geometry.type,
+                    coordinates: feature.geometry.coordinates,
+                },
+                lines: [],
+            };
+
+            // Verificar si la estación ya está en la línea antes de agregarla
+            const exists = mapStore.windows.createLine.stations.some(s => s.id === Station.id);
+            if (!exists) {
+                mapStore.addStationToLine(Station);
+                lineStore.addLineToStation(mapStore.windows.createLine.preview, Station.id);
+
+                if (mapStore.windows.createLine.stations.length === 1) {
+                    // Primera estación: iniciar la línea
+                    startDrawing(Station.geometry.coordinates);
+                } else {
+                    // Estación adicional: extender la línea
+                    addStationPointToLine(Station.geometry.coordinates);
+                }
+            }
         }
-      } else {
+    } else {
         const features = map.queryRenderedFeatures(e.point, {
-          layers: ["stations"],
+            layers: ["stations"],
         });
 
         if (features.length) {
-          const node = features[0].properties.node;
-          console.log(node);
-          mapStore.playSound();
-          mapStore.windows.station.name = features[0].properties.nombre;
-          mapStore.toggleWindow("station");
+            const propiedadesEstacion = features[0].properties;
+            console.log(propiedadesEstacion);
+            console.log(features[0].geometry);
+            mapStore.playSound();
+            mapStore.windows.station.name = features[0].properties.nombre;
+            mapStore.toggleWindow("station");
         }
-      }
-    });
+    }
+});
 
     // Cambiar el cursor a un puntero cuando el ratón pasa sobre los puntos
     map.on("mouseenter", "stations", () => {

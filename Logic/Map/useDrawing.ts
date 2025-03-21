@@ -1,6 +1,8 @@
 import * as turf from "@turf/turf"; // Importamos Turf.js
 import { listarCapasDelMapa } from "./utils/utils";
 import { useMapStore } from "../../stores/useMapStore"; // Importar la tienda
+import { useLineStore } from "../../stores/LinesStore";
+
 
 export function useDrawing(map) {
     if (!map) {
@@ -9,6 +11,7 @@ export function useDrawing(map) {
     }
 
     const mapStore = useMapStore(); // Acceder a la tienda de Pinia
+    const linesStore = useLineStore(); // Acceder a la tienda de líneas
 
     let drawing = false;
     let currentLineCoords = [];
@@ -83,6 +86,30 @@ export function useDrawing(map) {
         updateMap();
     }
 
+
+    function addStationPointToLine(stationCords) {
+        if (!drawing) return;
+
+        const nuevoPunto = stationCords;
+        const lineaId = mapStore.windows.createLine.preview.iconName; // ID de la línea (puedes pasarlo como parámetro)
+
+        // Generar puntos densos para el nuevo segmento
+        const start = currentLineCoords[currentLineCoords.length - 1]; // Último punto
+        const end = nuevoPunto;
+        const puntosDensos = generateDensePoints(start, end, lineaId, 100);
+
+        // Guardar el segmento
+        segmentos.push({
+            puntos: puntosDensos,
+            coordenadas: [start, end] // Coordenadas originales (opcional)
+        });
+
+        // Añadir el nuevo punto a la línea actual
+        currentLineCoords.push(nuevoPunto);
+        tempPoint = nuevoPunto; // Actualizar el punto temporal
+        updateMap();
+    }
+
     function generateDensePoints(start, end, lineaId, puntosPorSegmento = 100) {
         const puntos = [];
         const [lon1, lat1] = start;
@@ -114,12 +141,29 @@ export function useDrawing(map) {
 
     function confirmLine() {
         if (!drawing) return;
+        const StringToArray = mapStore.windows.createLine.preview.name.split(" ").join("");
+
         drawing = false;
         console.log("✅ Línea finalizada. Segmentos:", segmentos);
 
         map.off("mousemove", updateTemporaryLine);
         map.off("click", addPointToLine);
         window.removeEventListener("keydown", confirmLineOnEnter);
+
+        const line = {
+            id: StringToArray+"Layer",
+            name: mapStore.windows.createLine.preview.name,
+            color: mapStore.windows.createLine.preview.color,
+            logo: {
+                shape: mapStore.windows.createLine.preview.shape,
+                iconName: mapStore.windows.createLine.preview.iconName,
+                color: mapStore.windows.createLine.preview.color,
+            },
+            Stations: mapStore.windows.createLine.stations,
+            actualTrains: [],
+        };
+
+        linesStore.addLine(line);
 
         // No eliminar la capa ni la fuente para conservar la línea
         // map.removeLayer("drawingLineLayer");
@@ -193,5 +237,5 @@ export function useDrawing(map) {
         };
     }
 
-    return { startDrawing };
+    return { startDrawing, addStationPointToLine };
 }

@@ -139,7 +139,7 @@ const map = useMapStore();
 
       <div v-if="map.windows.lines.windows.fm" class="linea-content">
         <ul>
-          <li class="fm"><span class="dot"></span> Hospital de Bellvitge</li>
+          <li class="fm"><span class="dot"></span> <span>Hospital de Bellvitge</span></li>
         </ul>
       </div>
     </div>
@@ -163,6 +163,15 @@ button {
   &:hover {
     background: #262626;
     border: 1px solid #6b6b6b;
+  }
+}
+
+.fm {
+  span {
+    &:hover {
+      cursor: pointer;
+      color: #dbdcdc;
+    }
   }
 }
 </style>

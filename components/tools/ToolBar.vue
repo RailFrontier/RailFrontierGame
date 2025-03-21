@@ -41,3 +41,10 @@ const map = useMapStore();
         </ul>
     </div>
 </template>
+<style lang="scss" scoped>
+    .option{
+        span {
+            font-weight: 500;
+        }
+    }
+</style>

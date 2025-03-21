@@ -10,11 +10,7 @@ const map = useMapStore();
 <template>
     <div v-if="map.windows.addStation.visible" class="lineas">
       <div class="title">
-        <img
-          src="public/RailFrontier/station-svgrepo-com.svg"
-          alt=""
-          style="margin-right: 10px"
-        />
+
         <h3 style="margin-top: 0 !important;">Create Station</h3>
       </div>
       <div class="content">
@@ -30,6 +26,8 @@ const map = useMapStore();
   .content {
     display: flex;
     flex-direction: column;
+    font-family: Helvetica Neue, "Inter", Arial, Helvetica, sans-serif !important;
+    font-weight: 500;
   }
 
   .custom-swatches {
@@ -42,9 +40,9 @@ const map = useMapStore();
       color: #dbdcdc;
       padding: 0;
       margin: 0;
-      font-weight: 400;
+      font-weight: 500;
       font-size: 1rem;
-      font-family: "Roboto", sans-serif;
+      font-family: Helvetica Neue, "Inter", Arial, Helvetica, sans-serif;
     }
     input {
       border: 1px solid #323232;
@@ -67,6 +65,9 @@ const map = useMapStore();
       margin-top: 10px;
       cursor: pointer;
       outline: none;
+      font-family: Helvetica Neue, "Inter", Arial, Helvetica, sans-serif;
+      font-weight: 500;
+      font-size: 0.85rem;
 
       &:hover {
         background: #262626;
@@ -79,7 +80,7 @@ const map = useMapStore();
       border-radius: 5px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
       z-index: 100;
-      width: 300px;
+      width: 240px;
       height: 280px;
     }
 </style>

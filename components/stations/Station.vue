@@ -35,16 +35,12 @@ const lineas = [
 <template>
   <div v-if="map.windows.station.visible" class="lineas">
     <div class="title">
-      <img
-        src="public/RailFrontier/station-svgrepo-com.svg"
-        alt=""
-        style="margin-right: 10px"
-      />
+
       <h3 style="margin-top: 0 !important">{{ map.windows.station.name  }}</h3>
     </div>
     <div class="image-wrapper"></div>
     <div class="content">
-      <span>Lineas:</span>
+      <span>Lineas</span>
       <div class="line-wrapper">
         <img v-for="line in lineas" :src="line.url" :key="line" alt="" />
       </div>
@@ -90,7 +86,7 @@ h3 {
   margin: 0;
   font-weight: 400;
   font-size: 1rem;
-  font-family: "Roboto", sans-serif;
+  font-family: Helvetica Neue, "Inter", Arial, Helvetica, sans-serif;
 }
 input {
   border: 1px solid #323232;
@@ -113,6 +109,9 @@ button {
   margin-top: 10px;
   cursor: pointer;
   outline: none;
+  font-family: Helvetica Neue, "Inter", Arial, Helvetica, sans-serif;
+  font-weight: 500;
+  font-size: 0.85rem;
 
   &:hover {
     background: #262626;
@@ -138,7 +137,7 @@ button {
 span {
   color: #dbdcdc !important;
   font-size: 1rem !important;
-  font-family: "Roboto", sans-serif !important;
+  font-weight: 500 !important;
 }
 
 img {

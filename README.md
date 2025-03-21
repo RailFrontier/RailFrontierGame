@@ -1,75 +1,29 @@
-# Nuxt Minimal Starter
+# 🚇 Rail Frontier
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+An interactive Railway system visualization and simulation project.
 
-## Setup
+![Metro Map Preview](public/Captura1.png)
 
-Make sure to install dependencies:
+## ✨ Features
 
-```bash
-# npm
-npm install
+- 🗺️ Interactive 3D map of Barcelona's metro network
+- 🚉 Detailed station information with connections
+- 🚂 Complete metro line visualization with accurate routes
+- 🔄 Real-time updates and simulations
+- 🖱️ Click-and-drag interface for easy navigation
+- 🏗️ Tools for planning and creating new metro lines
 
-# pnpm
-pnpm install
+## 📸 Screenshots
 
-# yarn
-yarn install
+<div align="center">
+  <img src="public/Captura1.png" alt="Map View" width="45%">
+  <img src="public/Captura2.png" alt="Station Detail" width="45%">
+</div>
 
-# bun
-bun install
-```
+## 🛠️ Technology Stack
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+- **Frontend**: Vue 3 with Nuxt.js
+- **Maps**: MapLibre GL
+- **GeoData**: Turf.js for GIS operations
+- **State Management**: Pinia
+- **Styling**: SCSS

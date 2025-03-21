@@ -37,12 +37,14 @@ export const useMapStore = defineStore("mapStore",{
                     color: "#ed1b2d",
                     name: "Default Line",
                     iconName: "D1",
-                }
+                },
+                stations: [],
             },
             station: {
                 visible: false,
                 name: "",
                 node: null,
+                lines: [],
             },
         },
         loading: true,
@@ -103,6 +105,12 @@ export const useMapStore = defineStore("mapStore",{
             this.toggleWindow("createLine");
             this.focus = true;
         },
+        addStationToLine(station) {
+            const exists = this.windows.createLine.stations.some(s => s.id === station.id);
+            if (!exists) {
+                this.windows.createLine.stations.push(station);
+            }
+        },
         lineCreationConfirmed() {
             this.lineCreation = false;
             this.windows.createLine.preview.color = "";
@@ -110,6 +118,7 @@ export const useMapStore = defineStore("mapStore",{
             this.windows.createLine.preview.iconName = "";
             this.toggleWindow("createLine");
             this.focus = false;
+            this.windows.createLine.stations = [];
         },
         stationConfirmed() {
             this.focus = false;

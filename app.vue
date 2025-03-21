@@ -36,7 +36,7 @@ const toggleDrawing = () => {
 
 onMounted(() => {
   test();
-})
+});
 </script>
 <template>
   <div>
@@ -127,9 +127,29 @@ onMounted(() => {
         alt=""
       />
       <img
+        draggable="false"
+        src="public/RailFrontier/contract_edit_24dp_DBDCDC_FILL0_wght400_GRAD0_opsz24.svg"
+        alt=""
+      />
+      <img
+        draggable="false"
+        src="public/RailFrontier/finance_24dp_DBDCDC_FILL0_wght400_GRAD0_opsz24.svg"
+        alt=""
+      />
+      <img
+        draggable="false"
+        src="public/RailFrontier/all_inbox_24dp_DBDCDC_FILL0_wght400_GRAD0_opsz24.svg"
+        alt=""
+      />
+      <img
         @click="map.toggleMusicSettings"
         draggable="false"
         src="public/volume_up_24dp_DBDCDC_FILL0_wght400_GRAD0_opsz24.svg"
+        alt=""
+      />
+      <img
+        draggable="false"
+        src="public/RailFrontier/settings_24dp_DBDCDC_FILL0_wght400_GRAD0_opsz24 (2).svg"
         alt=""
       />
     </div>
@@ -395,8 +415,8 @@ onMounted(() => {
       color: #dbdcdc;
       padding: 0;
       margin: 0;
-      font-weight: 400;
-      font-size: 1rem;
+      font-weight: 500;
+      font-size: 1.1rem;
     }
   }
 
@@ -594,6 +614,9 @@ onMounted(() => {
   max-width: 100%; /* Asegúrate de que no exceda el ancho del contenedor padre */
   margin: 0 auto;
   overflow-x: hidden; /* Oculta cualquier contenido que exceda el ancho horizontal */
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  color: #c4c3c3;
 }
 
 ul {
